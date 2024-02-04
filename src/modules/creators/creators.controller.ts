@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Req, Body } from '@nestjs/common';
 import { Request } from 'express';
-import { Creator } from './schemas/creators.schema';
+import { Creator } from '../../schemas/creators.schema';
 import { CreatorsService } from './creators.service';
 import { CreateCreatorDto } from '../../dto/create-creators.dto';
 
