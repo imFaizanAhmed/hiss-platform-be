@@ -21,6 +21,13 @@ export class AuthController {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  signUp(@Body() signUpDto: Record<string, any>) {
+    // have to complete this using hashing of password
+    return this.authService.signIn(signUpDto.email, signUpDto.password);
+  }
+
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req: any) {
