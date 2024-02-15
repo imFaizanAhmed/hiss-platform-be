@@ -6,7 +6,9 @@ import { CreateCreatorDto } from '../../dto/create-creators.dto';
 
 @Injectable()
 export class CreatorsService {
-  constructor(@InjectModel(Creator.name) private creatorModel: Model<Creator>) {}
+  constructor(
+    @InjectModel(Creator.name) private creatorModel: Model<Creator>,
+  ) {}
 
   async create(createCreatorDto: CreateCreatorDto): Promise<Creator> {
     const createdCreator = new this.creatorModel(createCreatorDto);
@@ -15,5 +17,9 @@ export class CreatorsService {
 
   async findAll(): Promise<Creator[]> {
     return this.creatorModel.find().exec();
+  }
+
+  async findOne(email: string): Promise<Creator> {
+    return this.creatorModel.findOne({ email }).exec();
   }
 }
