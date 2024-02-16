@@ -17,15 +17,13 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
   signUp(@Body() signUpDto: Record<string, any>) {
     // have to complete this using hashing of password
-    return this.authService.signIn(signUpDto.email, signUpDto.password);
+    // return this.authService.validateUser(signUpDto.email, signUpDto.password);
+    return this.authService.login({
+      email: signUpDto.email,
+      password: signUpDto.password,
+    });
   }
 
   @UseGuards(AuthGuard)

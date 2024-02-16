@@ -6,7 +6,13 @@ import { CreatorsModule } from './modules';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb+srv://admin:Admin@hiss-db.dsr65xf.mongodb.net/hiss-db?retryWrites=true&w=majority'), CreatorsModule, AuthModule],
+  imports: [
+    MongooseModule.forRoot(
+      'mongodb+srv://admin:Admin@hiss-db.dsr65xf.mongodb.net/hiss-db?retryWrites=true&w=majority',
+    ),
+    CreatorsModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
