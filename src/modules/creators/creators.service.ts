@@ -2,24 +2,13 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Creator } from '../../schemas/creators.schema';
-import { CreateCreatorDto } from '../../dto/create-creators.dto';
+import { BaseService } from 'src/base.service';
 
 @Injectable()
-export class CreatorsService {
+export class CreatorsService extends BaseService<Creator> {
   constructor(
     @InjectModel(Creator.name) private creatorModel: Model<Creator>,
-  ) {}
-
-  async create(createCreatorDto: CreateCreatorDto): Promise<Creator> {
-    const createdCreator = new this.creatorModel(createCreatorDto);
-    return createdCreator.save();
-  }
-
-  async findAll(): Promise<Creator[]> {
-    return this.creatorModel.find().exec();
-  }
-
-  async findOne(email: string): Promise<Creator> {
-    return this.creatorModel.findOne({ email }).exec();
+  ) {
+    super(creatorModel);
   }
 }

@@ -1,9 +1,10 @@
-import { IsString, IsInt, IsEmail } from 'class-validator';
+import { IsString, IsInt, IsEmail, IsOptional } from 'class-validator';
 
 export class CreateCreatorDto {
   @IsString()
   firstName: string;
 
+  @IsOptional()
   @IsString()
   middleName: string;
 
@@ -16,6 +17,10 @@ export class CreateCreatorDto {
   @IsEmail()
   email: string;
 
+  @IsOptional()
   @IsInt()
   phoneNumbe: number;
+
+  @IsString()
+  password: string
 }
