@@ -4,6 +4,20 @@ import { baseSchema } from './basic.schema';
 
 export type CreatorDocument = HydratedDocument<Creator>;
 
+export enum AuthEnum {
+  Email = 'email',
+  Google = 'google',
+  Linkedin = 'linkedin'
+}
+
+function isKeyOfEnum(value: string): value is AuthEnum {
+  return Object.values(AuthEnum).includes(value as any);
+}
+
+export function isValueInEnum(value: string): boolean {
+  return isKeyOfEnum(value);
+}
+
 @Schema()
 export class Creator extends baseSchema {
 
@@ -27,6 +41,12 @@ export class Creator extends baseSchema {
 
   @Prop({required: false})
   phoneNumbe: string;
+
+  @Prop({required: false})
+  picture: string;
+
+  @Prop({ required: true, enum: AuthEnum, default: AuthEnum.Email })
+  authType: AuthEnum;
 }
 
 export const CreatorSchema = SchemaFactory.createForClass(Creator);

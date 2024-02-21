@@ -1,4 +1,5 @@
 import { IsString, IsInt, IsEmail, IsOptional } from 'class-validator';
+import { AuthEnum } from 'src/schemas/creators.schema';
 
 export class CreateCreatorDto {
   @IsString()
@@ -23,4 +24,11 @@ export class CreateCreatorDto {
 
   @IsString()
   password: string
+
+  @IsOptional()
+  @IsString()
+  picture: string
+
+  @IsString()
+  authType: AuthEnum
 }

@@ -6,10 +6,10 @@ export class UserNotFoundException extends HttpException {
   }
 }
 
-export class LoginPasswordInvalidException extends HttpException {
+export class LoginTypeInvalidException extends HttpException {
   constructor(message?: string, statusCode?: number) {
     super(
-      message || 'Login Password invalid',
+      message || 'Login type invalid',
       statusCode || HttpStatus.UNAUTHORIZED,
     );
   }
