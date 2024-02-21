@@ -10,7 +10,7 @@ import { LocalStrategy } from './local.strategy';
   imports: [CreatorsModule, PassportModule, JwtModule.register({
     global: true,
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '60s' },
+    signOptions: { expiresIn: '7d' },
   }),],
   providers: [AuthService, LocalStrategy],
   controllers: [AuthController],

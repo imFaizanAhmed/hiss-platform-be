@@ -41,7 +41,6 @@ export class AuthService {
   }
 
   async getJwtToken(creator: { [P in keyof Creator]: string }) {
-    console.log("get JWT token for", creator);
     const payload = { email: creator.email, sub: creator.firstName + creator.lastName };
     return {
       access_token: this.jwtService.sign(payload),
