@@ -1,9 +1,11 @@
-import { IsString, IsInt, IsEmail } from 'class-validator';
+import { IsString, IsInt, IsEmail, IsOptional } from 'class-validator';
+import { AuthEnum } from 'src/schemas/creators.schema';
 
 export class CreateCreatorDto {
   @IsString()
   firstName: string;
 
+  @IsOptional()
   @IsString()
   middleName: string;
 
@@ -16,6 +18,22 @@ export class CreateCreatorDto {
   @IsEmail()
   email: string;
 
+  @IsOptional()
   @IsInt()
   phoneNumbe: number;
+
+  @IsOptional()
+  @IsString()
+  password: string
+
+  @IsOptional()
+  @IsString()
+  picture: string
+
+  @IsOptional()
+  @IsString()
+  authAccessToken: string
+
+  @IsString()
+  authType: AuthEnum
 }

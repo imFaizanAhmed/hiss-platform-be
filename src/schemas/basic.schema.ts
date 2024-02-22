@@ -1,6 +1,7 @@
 import { Prop } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 
-export class baseSchema {
+export class baseSchema extends Document {
 
     @Prop({required: true})
     updatedAt: Date;
@@ -8,5 +9,7 @@ export class baseSchema {
     @Prop({required: true})
     createdAt: Date;
 
-    
+    @Prop({required: false})
+    deletedAt: Date | null;
+
 }
