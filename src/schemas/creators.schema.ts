@@ -33,7 +33,7 @@ export class Creator extends baseSchema {
   @Prop({ required: true})
   title: string;
 
-  @Prop({required: true})
+  @Prop({required: false})
   password: string;
 
   @Prop({required: true})
@@ -44,6 +44,9 @@ export class Creator extends baseSchema {
 
   @Prop({required: false})
   picture: string;
+
+  @Prop({required: false})
+  authAccessToken: string;
 
   @Prop({ required: true, enum: AuthEnum, default: AuthEnum.Email })
   authType: AuthEnum;

@@ -22,12 +22,17 @@ export class CreateCreatorDto {
   @IsInt()
   phoneNumbe: number;
 
+  @IsOptional()
   @IsString()
   password: string
 
   @IsOptional()
   @IsString()
   picture: string
+
+  @IsOptional()
+  @IsString()
+  authAccessToken: string
 
   @IsString()
   authType: AuthEnum
