@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { SomeThingWentWrongException } from 'src/exceptions/errors.exceptions';
-import { ObjectId } from 'mongoose';
 import { CreatePostDto, DeletePostDto, GetPostDto } from 'src/dto/post.dto';
 
 @Controller('post')
@@ -18,7 +17,7 @@ export class PostsController {
   constructor(private postsService: PostsService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Get('/:id')
+  @Get('get-one/:id')
   async getById(@Param() params: GetPostDto) {
     // have to complete this using hashing of password
     try {
@@ -33,6 +32,7 @@ export class PostsController {
   async getAllPosts() {
     // have to complete this using hashing of password
     try {
+      console.log("get-all-creators");
       return this.postsService.findAll();
     } catch (error) {
       throw new SomeThingWentWrongException();
@@ -54,7 +54,6 @@ export class PostsController {
   @Delete('/:id')
   async deletePost(@Param() data: DeletePostDto) {
     try {
-      console.log("");
       return this.postsService.deleteOne(data.id);
     } catch (e) {
       throw new SomeThingWentWrongException();
