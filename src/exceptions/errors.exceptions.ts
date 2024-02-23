@@ -15,6 +15,15 @@ export class LoginTypeInvalidException extends HttpException {
   }
 }
 
+export class SomeThingWentWrongException extends HttpException {
+  constructor(message?: string, statusCode?: number) {
+    super(
+      message || 'Something went wrong',
+      statusCode || HttpStatus.BAD_REQUEST,
+    );
+  }
+}
+
 export class ProductIdsInvalidException extends HttpException {
   constructor(message?: string, statusCode?: number) {
     super(

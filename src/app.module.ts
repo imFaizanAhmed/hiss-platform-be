@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CreatorsModule } from './modules';
+import { CreatorsModule, PostsModule } from './modules';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
       'mongodb+srv://admin:Admin@hiss-db.dsr65xf.mongodb.net/hiss-db?retryWrites=true&w=majority',
     ),
     CreatorsModule,
+    PostsModule,
     AuthModule,
   ],
   controllers: [AppController],
