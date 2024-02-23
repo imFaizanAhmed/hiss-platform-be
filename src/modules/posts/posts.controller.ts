@@ -7,7 +7,6 @@ import {
   HttpStatus,
   Param,
   Post,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { SomeThingWentWrongException } from 'src/exceptions/errors.exceptions';
