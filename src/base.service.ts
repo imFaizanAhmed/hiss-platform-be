@@ -60,7 +60,6 @@ export class BaseService<T extends Partial<Document & WithUpdatedAt>>
   async findById(
     id: string,
   ): Promise<IfAny<T, any, Document<unknown, {}, T> & Require_id<T>>> {
-    console.log("Id Id Id", id);
     return this.model.findById(id).exec();
   }
 
