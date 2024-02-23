@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Model, Document, FilterQuery, IfAny, Require_id } from 'mongoose';
+import {DeleteResult} from 'mongodb';
 
 export interface CrudService<T> {
   create(createDto: Partial<T>): Promise<T>;
@@ -65,6 +66,10 @@ export class BaseService<T extends Partial<Document & WithUpdatedAt>>
 
   async update(id: string, updateDto: Partial<T>): Promise<T> {
     return this.model.findByIdAndUpdate(id, updateDto, { new: true }).exec();
+  }
+
+  async deleteOne(_id: string): Promise<DeleteResult> {
+    return this.model.deleteOne({_id}).exec();
   }
 
   // async remove(id: string): Promise<T> {

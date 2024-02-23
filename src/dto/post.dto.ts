@@ -12,3 +12,8 @@ export class GetPostDto {
   @IsString()
   id: string
 }
+
+export class DeletePostDto {
+  @IsString()
+  id: string
+}
