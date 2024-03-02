@@ -1,4 +1,4 @@
-import { IsString, IsObject } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -10,10 +10,21 @@ export class CreatePostDto {
 
 export class GetPostDto {
   @IsString()
-  id: string
+  id: string;
+}
+
+export class addPostCommentsDTO {
+  @IsString()
+  postId: string;
+
+  @IsString()
+  content: string;
+
+  @IsString()
+  creatorId: string;
 }
 
 export class DeletePostDto {
   @IsString()
-  id: string
+  id: string;
 }

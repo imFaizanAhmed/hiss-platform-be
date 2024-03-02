@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { SomeThingWentWrongException } from 'src/exceptions/errors.exceptions';
-import { CreatePostDto, DeletePostDto, GetPostDto } from 'src/dto/post.dto';
+import { CreatePostDto, DeletePostDto, GetPostDto, addPostCommentsDTO } from 'src/dto/post.dto';
 
 @Controller('post')
 export class PostsController {
@@ -54,6 +54,26 @@ export class PostsController {
   async deletePost(@Param() data: DeletePostDto) {
     try {
       return this.postsService.deleteOne(data.id);
+    } catch (e) {
+      throw new SomeThingWentWrongException();
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/get-post-comments/:id')
+  async getPostComments(@Param() params: GetPostDto) {
+    try {
+      return this.postsService.getPostComments(params.id);
+    } catch (e) {
+      throw new SomeThingWentWrongException();
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/add-post-comments')
+  async addPostComments(@Body() body: addPostCommentsDTO) {
+    try {
+      return this.postsService.addPostComments(body);
     } catch (e) {
       throw new SomeThingWentWrongException();
     }

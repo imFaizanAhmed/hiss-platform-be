@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, PipelineStage } from 'mongoose';
 import { baseSchema } from './basic.schema';
 
 export type PostDocument = HydratedDocument<Post>;
@@ -54,13 +54,15 @@ export class Post extends baseSchema {
     required: false,
   })
   comments: {
+    id: number;
     creatorId: string;
     content: string;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;
     replies: {
-      user_id: string;
+      id: number;
+      userId: string;
       content: string;
       reactions: { reaction: string; creatorId: string }[];
       createdAt: Date;
@@ -71,3 +73,8 @@ export class Post extends baseSchema {
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
+
+
+
+// aggregate-paginate-v2
+// ref table
