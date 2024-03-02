@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatorsService } from 'src/modules/creators/creators.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthEnum, Creator, isValueInEnum } from '../schemas/creators.schema';
-import { LoginTypeInvalidException } from 'src/exceptions/errors.exceptions';
+import { AlreadyHaveAccountException, LoginTypeInvalidException } from 'src/exceptions/errors.exceptions';
 
 @Injectable()
 export class AuthService {
@@ -35,11 +35,23 @@ export class AuthService {
     return null;
   }
 
-  signUp(creator: Creator): Promise<any> {
+  async signUp(creator: Creator): Promise<any> {
     if (!isValueInEnum(creator.authType)) {
       throw new LoginTypeInvalidException();
     }
-    return this.creatorsService.create(creator);
+    const existedCreator = await this.creatorsService.findOne({ email: creator.email });
+    if (!existedCreator) {
+      // Creator does not exist then create 
+      return this.creatorsService.create(creator);
+    }
+    if (existedCreator.authType !== AuthEnum.Email) {
+      // Creator exists and login with 'google' or 'linkedin'
+      return existedCreator;
+    }
+    else {
+      // Creator exists and login with 'email'
+      throw new AlreadyHaveAccountException();
+    }
   }
 
   async getJwtToken(creator: { [P in keyof Creator]: string }) {

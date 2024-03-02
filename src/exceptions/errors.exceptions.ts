@@ -15,6 +15,15 @@ export class LoginTypeInvalidException extends HttpException {
   }
 }
 
+export class AlreadyHaveAccountException extends HttpException {
+  constructor(message?: string, statusCode?: number) {
+    super(
+      message || 'Already have account please try to login',
+      statusCode || HttpStatus.NOT_ACCEPTABLE,
+    );
+  }
+}
+
 export class SomeThingWentWrongException extends HttpException {
   constructor(message?: string, statusCode?: number) {
     super(
@@ -42,11 +51,11 @@ export class ProductOutOfStockException extends HttpException {
   }
 }
 
-export class OrderNotPlacedException extends HttpException {
+export class NotPlacedException extends HttpException {
   constructor(message?: string, statusCode?: number) {
     super(
-      message || 'Order cannot be placed',
-      statusCode || HttpStatus.BAD_REQUEST,
+      message || 'Creator is not found',
+      statusCode || HttpStatus.NOT_FOUND,
     );
   }
 }

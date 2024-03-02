@@ -13,7 +13,6 @@ export interface CrudService<T> {
   find(
     body: FilterQuery<T>,
   ): Promise<IfAny<T, any, Document<unknown, {}, T> & Require_id<T>>[]>;
-  // remove(id: string): Promise<T>;
 }
 
 interface WithUpdatedAt {
@@ -70,8 +69,4 @@ export class BaseService<T extends Partial<Document & WithUpdatedAt>>
   async deleteOne(_id: string): Promise<DeleteResult> {
     return this.model.deleteOne({_id}).exec();
   }
-
-  // async remove(id: string): Promise<T> {
-  //   return this.model.findByIdAndRemove(id).exec();
-  // }
 }
