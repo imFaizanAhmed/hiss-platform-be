@@ -1,49 +1,49 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, PipelineStage } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { baseSchema } from './basic.schema';
 
-export type PostDocument = HydratedDocument<Post>;
+export type PostDocument = Document & Post;
 
 @Schema()
 export class Post extends baseSchema {
-  @Prop({ required: true })
-  creatorId: string;
+  @Prop({ type: Types.ObjectId, ref: 'Creator', required: true }) // Adjusted to 'Creator' and ObjectId
+  creatorId: Types.ObjectId;
 
   @Prop({ required: true })
   content: string;
 
   @Prop({ required: false })
-  media: Buffer;
+  media: string;
+
+  // @Prop({
+  //   type: [
+  //     {
+  //       reaction: String,
+  //       creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted type and ref
+  //     },
+  //   ],
+  //   required: false,
+  // })
+  // reactions: { reaction: string; creatorId: Types.ObjectId }[];
 
   @Prop({
     type: [
       {
-        reaction: String,
-        creatorId: Number,
-      },
-    ],
-    required: false,
-  })
-  reactions: { reaction: string; creatorId: string }[];
-
-  @Prop({
-    type: [
-      {
-        creatorId: String,
+        creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted type and ref
         content: String,
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date || null,
         replies: [
           {
-            user_id: String,
+            creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted field name and type
             content: String,
-            reactions: [
-              {
-                reaction: String,
-                creatorId: Number,
-              },
-            ],
+            // reactions: [
+            //   {
+            //     reaction: String,
+            //     creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted type and ref
+            //   },
+            // ],
             createdAt: Date,
             updatedAt: Date,
             deletedAt: Date || null,
@@ -54,17 +54,15 @@ export class Post extends baseSchema {
     required: false,
   })
   comments: {
-    id: number;
-    creatorId: string;
+    creatorId: Types.ObjectId;
     content: string;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;
     replies: {
-      id: number;
-      userId: string;
+      creatorId: Types.ObjectId;
       content: string;
-      reactions: { reaction: string; creatorId: string }[];
+      // reactions: { reaction: string; creatorId: Types.ObjectId }[];
       createdAt: Date;
       updatedAt: Date;
       deletedAt: Date | null;
@@ -73,8 +71,3 @@ export class Post extends baseSchema {
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
-
-
-
-// aggregate-paginate-v2
-// ref table
