@@ -8,7 +8,7 @@ import {
   NotPlacedException,
   SomeThingWentWrongException,
 } from 'src/exceptions/errors.exceptions';
-import { getPostAggr } from 'src/aggregations/post.agg';
+import { getAllPostsAggr, getPostAggr } from 'src/aggregations/post.agg';
 
 @Injectable()
 export class PostsService extends BaseService<Post> {
@@ -26,6 +26,13 @@ export class PostsService extends BaseService<Post> {
   async getPostWithCreator(id: string) {
     const post = await this.postModel.aggregate(
       getPostAggr(new this.postModel.base.Types.ObjectId(id))
+    ).exec();
+    return post[0] || null;
+  }
+
+  async getAllPostsWithCreator() {
+    const post = await this.postModel.aggregate(
+      getAllPostsAggr()
     ).exec();
     return post[0] || null;
   }

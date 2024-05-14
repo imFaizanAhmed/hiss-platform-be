@@ -42,7 +42,7 @@ export class PostsController {
   async getAllPosts() {
     // have to complete this using hashing of password
     try {
-      return this.postsService.findAll();
+      return this.postsService.getAllPostsWithCreator();
     } catch (error) {
       throw new SomeThingWentWrongException();
     }

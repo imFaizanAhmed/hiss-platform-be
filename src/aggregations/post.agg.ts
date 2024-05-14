@@ -21,3 +21,14 @@ export const getPostAggr = (_id: Types.ObjectId) => [
     $limit: 1, // Ensure that no more than one document is returned
   },
 ];
+
+export const getAllPostsAggr = () => [
+  {
+    $lookup: {
+      from: 'creators', // the collection to join
+      localField: 'creatorId', // field from the input documents
+      foreignField: '_id', // field from the documents of the "from" collection
+      as: 'creator', // output array field
+    },
+  }
+];
