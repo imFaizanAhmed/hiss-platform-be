@@ -22,7 +22,7 @@ export const getPostAggr = (_id: Types.ObjectId) => [
   },
 ];
 
-export const getAllPostsAggr = () => [
+export const getAllPostsAggr = ({ page, limit }) => [
   {
     $lookup: {
       from: 'creators', // the collection to join
@@ -30,5 +30,24 @@ export const getAllPostsAggr = () => [
       foreignField: '_id', // field from the documents of the "from" collection
       as: 'creator', // output array field
     },
+  },
+  {
+    $facet: {
+      data: [
+        { $skip: (page - 1) * limit },
+        { $limit: limit },
+      ],
+      hasMoreCheck: [
+        { $skip: page * limit },
+        { $limit: 1 },
+      ]
+    }
+  },
+  {
+    $project: {
+      data: 1,
+      hasMore: { $gt: [{ $size: "$hasMoreCheck" }, 0] }
+    }
   }
 ];
+

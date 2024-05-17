@@ -24,23 +24,23 @@ export class PostsService extends BaseService<Post> {
   }
 
   async getPostWithCreator(id: string) {
-    const post = await this.postModel.aggregate(
-      getPostAggr(new this.postModel.base.Types.ObjectId(id))
-    ).exec();
+    const post = await this.postModel
+      .aggregate(getPostAggr(new this.postModel.base.Types.ObjectId(id)))
+      .exec();
     return post[0] || null;
   }
 
-  async getAllPostsWithCreator() {
-    const post = await this.postModel.aggregate(
-      getAllPostsAggr()
-    ).exec();
+  async getAllPostsWithCreator({page, limit}: {page:number, limit: number}) {
+    const post = await this.postModel
+      .aggregate(getAllPostsAggr({ page, limit }))
+      .exec();
     return post[0] || null;
   }
 
   convertToBase64(file: Express.Multer.File): string {
-   //Convert the file to base64 string
-   const fileB64 = file.buffer.toString('base64');
-   return `data:${file.mimetype};base64, ${fileB64}`;
+    //Convert the file to base64 string
+    const fileB64 = file.buffer.toString('base64');
+    return `data:${file.mimetype};base64, ${fileB64}`;
   }
 
   async addPostComments({

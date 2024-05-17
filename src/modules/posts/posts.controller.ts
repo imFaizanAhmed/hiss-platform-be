@@ -8,7 +8,8 @@ import {
   HttpCode,
   HttpStatus,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PostsService } from './posts.service';
@@ -39,10 +40,14 @@ export class PostsController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/all')
-  async getAllPosts() {
+  async getAllPosts(@Query() query) {
     // have to complete this using hashing of password
     try {
-      return this.postsService.getAllPostsWithCreator();
+      const { page, limit } = query;
+      return this.postsService.getAllPostsWithCreator({
+        page: Number(page),
+        limit: Number(limit),
+      });
     } catch (error) {
       throw new SomeThingWentWrongException();
     }
