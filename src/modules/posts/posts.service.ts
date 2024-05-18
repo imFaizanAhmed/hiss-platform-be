@@ -53,29 +53,33 @@ export class PostsService extends BaseService<Post> {
     creatorId: string;
   }) {
     try {
+      console.log("service going to fetch post")
       const post = await this.postModel.findById(postId);
       if (!post) {
         throw new NotPlacedException('Post not found');
       }
 
       const creator = await this.creatorsService.findById(creatorId);
+      console.log("creator =>", creator);
       if (!creator) {
+        //? in this case "something went wrong is sent"
         throw new NotPlacedException('creator not found');
       }
+      
 
       const newComment = {
         id: post.comments.length,
         content: content,
-        creatorId: creatorId,
-        totalLikes: 0,
-        replies: [],
+        creatorId: creator.id,
+        // totalLikes: 0,
+        replies: null,
         // reactions: [],
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       };
 
-      // post.comments.push(newComment);
+      post.comments.push(newComment);
       await post.save();
       return newComment;
     } catch (e) {

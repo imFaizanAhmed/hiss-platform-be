@@ -29,6 +29,7 @@ export class Post extends baseSchema {
   @Prop({
     type: [
       {
+        id: Number,
         creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted type and ref
         content: String,
         createdAt: Date,
@@ -54,7 +55,8 @@ export class Post extends baseSchema {
     required: false,
   })
   comments: {
-    creatorId: Types.ObjectId;
+    id: number,
+    creatorId: Types.ObjectId | null;
     content: string;
     createdAt: Date;
     updatedAt: Date;
@@ -66,7 +68,7 @@ export class Post extends baseSchema {
       createdAt: Date;
       updatedAt: Date;
       deletedAt: Date | null;
-    }[];
+    }[] | null;
   }[];
 }
 
