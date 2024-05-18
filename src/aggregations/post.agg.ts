@@ -32,6 +32,18 @@ export const getAllPostsAggr = ({ page, limit }) => [
     },
   },
   {
+    $addFields: {
+      creator: { $arrayElemAt: ['$creator', 0] } // extract the first element from the creator array
+    }
+  },
+  {
+    $addFields: {
+      comments: {
+        $slice: ['$comments', 4] // Limit comments to 4
+      }
+    }
+  },
+  {
     $facet: {
       data: [
         { $skip: (page - 1) * limit },
