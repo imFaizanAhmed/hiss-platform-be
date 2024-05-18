@@ -53,14 +53,12 @@ export class PostsService extends BaseService<Post> {
     creatorId: string;
   }) {
     try {
-      console.log("service going to fetch post")
       const post = await this.postModel.findById(postId);
       if (!post) {
         throw new NotPlacedException('Post not found');
       }
 
       const creator = await this.creatorsService.findById(creatorId);
-      console.log("creator =>", creator);
       if (!creator) {
         //? in this case "something went wrong is sent"
         throw new NotPlacedException('creator not found');
