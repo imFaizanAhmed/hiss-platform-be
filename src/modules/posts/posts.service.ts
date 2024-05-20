@@ -69,7 +69,7 @@ export class PostsService extends BaseService<Post> {
         id: post.comments.length,
         content: content,
         creatorId: creator.id,
-        // totalLikes: 0,
+        totalLikes: 0,
         replies: null,
         // reactions: [],
         createdAt: new Date(),

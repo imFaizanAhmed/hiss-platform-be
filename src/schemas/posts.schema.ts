@@ -31,44 +31,25 @@ export class Post extends baseSchema {
       {
         id: Number,
         creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted type and ref
+        totalLikes: Number,
         content: String,
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date || null,
-        replies: [
-          {
-            creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted field name and type
-            content: String,
-            // reactions: [
-            //   {
-            //     reaction: String,
-            //     creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted type and ref
-            //   },
-            // ],
-            createdAt: Date,
-            updatedAt: Date,
-            deletedAt: Date || null,
-          },
-        ],
+        commentId: Number || null
       },
     ],
     required: false,
   })
   comments: {
     id: number,
-    creatorId: Types.ObjectId | null;
+    creatorId: Types.ObjectId;
     content: string;
+    totalLikes: number;
+    commentId?: number | null; // if not null, then it's reply of that comment.
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;
-    replies: {
-      creatorId: Types.ObjectId;
-      content: string;
-      // reactions: { reaction: string; creatorId: Types.ObjectId }[];
-      createdAt: Date;
-      updatedAt: Date;
-      deletedAt: Date | null;
-    }[] | null;
   }[];
 }
 
