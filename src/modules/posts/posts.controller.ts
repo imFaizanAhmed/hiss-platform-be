@@ -19,6 +19,7 @@ import {
   DeletePostDto,
   GetPostDto,
   addPostCommentsDTO,
+  likeUnlikeCommentsDTO,
 } from 'src/dto/post.dto';
 import { Types } from 'mongoose';
 
@@ -104,6 +105,16 @@ export class PostsController {
   async addPostComments(@Body() body: addPostCommentsDTO) {
     try {
       return this.postsService.addPostComments(body);
+    } catch (e) {
+      throw new SomeThingWentWrongException();
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/like-unlike-comment')
+  async likeUnlikeComments(@Body() body: likeUnlikeCommentsDTO) {
+    try {
+      return this.postsService.likeUnlikeComments(body);
     } catch (e) {
       throw new SomeThingWentWrongException();
     }

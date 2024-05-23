@@ -15,6 +15,12 @@ export class Post extends baseSchema {
   @Prop({ required: false })
   media: string;
 
+  @Prop({ required: false })
+  totalLikes: number;
+
+  @Prop({ type: [Types.ObjectId], ref: 'Creator', required: false })
+  likedBy: Types.ObjectId[];
+
   // @Prop({
   //   type: [
   //     {
@@ -32,20 +38,22 @@ export class Post extends baseSchema {
         id: Number,
         creatorId: { type: Types.ObjectId, ref: 'Creator' }, // Adjusted type and ref
         totalLikes: Number,
+        likedBy: [{ type: Types.ObjectId, ref: 'Creator' }],
         content: String,
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date || null,
-        commentId: Number || null
+        commentId: Number || null,
       },
     ],
     required: false,
   })
   comments: {
-    id: number,
+    id: number;
     creatorId: Types.ObjectId;
     content: string;
     totalLikes: number;
+    likedBy: Types.ObjectId[] | null;
     commentId?: number | null; // if not null, then it's reply of that comment.
     createdAt: Date;
     updatedAt: Date;

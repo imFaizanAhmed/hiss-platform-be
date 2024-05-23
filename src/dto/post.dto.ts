@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -22,6 +22,20 @@ export class addPostCommentsDTO {
 
   @IsString()
   creatorId: string;
+}
+
+export class likeUnlikeCommentsDTO {
+  @IsString()
+  creatorId: string;
+
+  @IsNumber()
+  commentId: number;
+
+  @IsNumber()
+  likeCount: number;
+
+  @IsString()
+  postId: string
 }
 
 export class DeletePostDto {

@@ -33,33 +33,48 @@ export const getAllPostsAggr = ({ page, limit }) => [
   },
   {
     $addFields: {
-      creator: { $arrayElemAt: ['$creator', 0] } // extract the first element from the creator array
-    }
+      creator: { $arrayElemAt: ['$creator', 0] }, // extract the first element from the creator array
+    },
   },
   {
     $addFields: {
       comments: {
-        $slice: ['$comments', 4] // Limit comments to 4
-      }
-    }
+        $slice: ['$comments', 4], // Limit comments to 4
+      },
+    },
   },
   {
     $facet: {
-      data: [
-        { $skip: (page - 1) * limit },
-        { $limit: limit },
-      ],
-      hasMoreCheck: [
-        { $skip: page * limit },
-        { $limit: 1 },
-      ]
-    }
+      data: [{ $skip: (page - 1) * limit }, { $limit: limit }],
+      hasMoreCheck: [{ $skip: page * limit }, { $limit: 1 }],
+    },
   },
   {
     $project: {
       data: 1,
-      hasMore: { $gt: [{ $size: "$hasMoreCheck" }, 0] }
-    }
-  }
+      hasMore: { $gt: [{ $size: '$hasMoreCheck' }, 0] },
+    },
+  },
 ];
 
+export const setLikesCommentOfPost = ({
+  commentId,
+  postId,
+  likeCount
+}: {
+  commentId: number;
+  postId: Types.ObjectId;
+  likeCount: number;
+}) => [
+  // Match the post with the given ID
+  { $match: { _id: postId } },
+  // Deconstruct the comments array
+  { $unwind: '$comments' },
+  // Match the comment with the given ID
+  { $match: { 'comments.id': commentId } },
+  {
+    $set: {
+      'comments.totalLikes': likeCount
+    },
+  },
+];

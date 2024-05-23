@@ -8,7 +8,10 @@ import {
   NotPlacedException,
   SomeThingWentWrongException,
 } from 'src/exceptions/errors.exceptions';
-import { getAllPostsAggr, getPostAggr } from 'src/aggregations/post.agg';
+import {
+  getAllPostsAggr,
+  getPostAggr
+} from 'src/aggregations/post.agg';
 
 @Injectable()
 export class PostsService extends BaseService<Post> {
@@ -30,7 +33,13 @@ export class PostsService extends BaseService<Post> {
     return post[0] || null;
   }
 
-  async getAllPostsWithCreator({page, limit}: {page:number, limit: number}) {
+  async getAllPostsWithCreator({
+    page,
+    limit,
+  }: {
+    page: number;
+    limit: number;
+  }) {
     const post = await this.postModel
       .aggregate(getAllPostsAggr({ page, limit }))
       .exec();
@@ -63,13 +72,13 @@ export class PostsService extends BaseService<Post> {
         //? in this case "something went wrong is sent"
         throw new NotPlacedException('creator not found');
       }
-      
 
       const newComment = {
         id: post.comments.length,
         content: content,
         creatorId: creator.id,
         totalLikes: 0,
+        likedBy: null,
         replies: null,
         // reactions: [],
         createdAt: new Date(),
@@ -83,5 +92,29 @@ export class PostsService extends BaseService<Post> {
     } catch (e) {
       throw new SomeThingWentWrongException();
     }
+  }
+
+  async likeUnlikeComments({
+    commentId,
+    likeCount,
+    postId,
+    creatorId
+  }: {
+    commentId: number;
+    likeCount: number;
+    postId: string;
+    creatorId: string;
+  }) {
+    const post = await this.postModel
+    .updateOne(
+      { 
+        _id: new this.postModel.base.Types.ObjectId(postId),
+        "comments.id": commentId
+      },
+      { 
+        $set: { "comments.$.totalLikes": likeCount, "comments.$.likedBy": creatorId } 
+      }
+    );
+    return post;
   }
 }

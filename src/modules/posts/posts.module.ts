@@ -4,10 +4,11 @@ import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { Post, PostSchema } from '../../schemas/posts.schema';
 import { CreatorsModule } from '../creators/creators.module';
+import { DbModule } from 'src/schemas/db.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    DbModule,
     CreatorsModule
   ],
   controllers: [PostsController],
