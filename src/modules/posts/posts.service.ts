@@ -9,8 +9,9 @@ import {
   SomeThingWentWrongException,
 } from 'src/exceptions/errors.exceptions';
 import {
-  getAllPostsAggr,
-  getPostAggr
+  getPaginatingComments,
+  getPaginatingPostsAggr,
+  getPostAggr,
 } from 'src/aggregations/post.agg';
 
 @Injectable()
@@ -22,8 +23,12 @@ export class PostsService extends BaseService<Post> {
     super(postModel);
   }
 
-  getPostComments(id: string) {
-    return this.postModel.findById(id, { comments: true });
+  async getPostComments(id: string, page: number, limit: number) {
+    const postId = new this.postModel.base.Types.ObjectId(id);
+    const post = await this.postModel
+      .aggregate(getPaginatingComments({ postId, page, limit }))
+      .exec();
+    return post;
   }
 
   async getPostWithCreator(id: string) {
@@ -41,7 +46,7 @@ export class PostsService extends BaseService<Post> {
     limit: number;
   }) {
     const post = await this.postModel
-      .aggregate(getAllPostsAggr({ page, limit }))
+      .aggregate(getPaginatingPostsAggr({ page, limit }))
       .exec();
     return post[0] || null;
   }
@@ -98,22 +103,24 @@ export class PostsService extends BaseService<Post> {
     commentId,
     likeCount,
     postId,
-    creatorId
+    creatorId,
   }: {
     commentId: number;
     likeCount: number;
     postId: string;
     creatorId: string;
   }) {
-    const post = await this.postModel
-    .updateOne(
-      { 
+    const post = await this.postModel.updateOne(
+      {
         _id: new this.postModel.base.Types.ObjectId(postId),
-        "comments.id": commentId
+        'comments.id': commentId,
       },
-      { 
-        $set: { "comments.$.totalLikes": likeCount, "comments.$.likedBy": creatorId } 
-      }
+      {
+        $set: {
+          'comments.$.totalLikes': likeCount,
+          'comments.$.likedBy': creatorId,
+        },
+      },
     );
     return post;
   }

@@ -17,7 +17,8 @@ import { SomeThingWentWrongException } from 'src/exceptions/errors.exceptions';
 import {
   CreatePostDto,
   DeletePostDto,
-  GetPostDto,
+  GetPaginatedPostCommentsDto,
+  GetPostIdDto,
   addPostCommentsDTO,
   likeUnlikeCommentsDTO,
 } from 'src/dto/post.dto';
@@ -29,7 +30,7 @@ export class PostsController {
 
   @HttpCode(HttpStatus.OK)
   @Get('get-one/:id')
-  async getById(@Param() params: GetPostDto) {
+  async getById(@Param() params: GetPostIdDto) {
     // have to complete this using hashing of password
     try {
       // have to test it
@@ -90,11 +91,13 @@ export class PostsController {
     }
   }
 
+  //! have to test this API
   @HttpCode(HttpStatus.OK)
   @Get('/get-post-comments/:id')
-  async getPostComments(@Param() params: GetPostDto) {
+  async getPostComments(@Param() params: GetPostIdDto, @Body() body: GetPaginatedPostCommentsDto) {
     try {
-      return this.postsService.getPostComments(params.id);
+      const limit = body.limit, page = body.page;
+      return this.postsService.getPostComments(params.id, page, limit);
     } catch (e) {
       throw new SomeThingWentWrongException();
     }

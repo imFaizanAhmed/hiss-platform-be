@@ -8,9 +8,17 @@ export class CreatePostDto {
   creatorId: string;
 }
 
-export class GetPostDto {
+export class GetPostIdDto {
   @IsString()
   id: string;
+}
+
+export class GetPaginatedPostCommentsDto {
+  @IsNumber()
+  page: number;
+
+  @IsNumber()
+  limit: number;
 }
 
 export class addPostCommentsDTO {
