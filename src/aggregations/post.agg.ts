@@ -54,6 +54,7 @@ export const getPaginatingPostsAggr = ({ page, limit }): PipelineStage[] => [
   },
   {
     $project: {
+      'data._id': 1,
       'data.creator': 1,
       'data.creatorId': 1,
       'data.content': 1,
@@ -97,24 +98,69 @@ export const getPaginatingComments = ({
   page: number;
   postId: Types.ObjectId;
 }): PipelineStage[] => [
+  // Match the documents with the specified postId
+  { $match: { _id: postId } },
+
   // Unwind the comments array
   { $unwind: '$comments' },
-
-  // Add a field to preserve the post id
-  { $addFields: { postId } },
-
+  
   // Project the necessary fields
   {
     $project: {
       _id: 0, // Exclude the original _id field of post
-      postId: 1,
+      postId: '$_id',
       comment: '$comments',
     },
   },
+  
+  // Use $facet to handle pagination and hasMore check
+  {
+    $facet: {
+      paginatedResults: [
+        { $skip: (page - 1) * limit },
+        { $limit: limit },
+        {
+          $group: {
+            _id: '$postId',
+            comments: { $push: '$comment' }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            postId: '$_id',
+            comments: 1
+          }
+        }
+      ],
+      hasMoreCheck: [
+        { $skip: page * limit },
+        { $limit: 1 },
+        {
+          $project: {
+            _id: 0
+          }
+        }
+      ]
+    }
+  },
 
-  // Skip the comments for previous pages
-  { $skip: (page - 1) * limit },
-
-  // Limit the number of comments
-  { $limit: limit },
+  // Merge the results and format the final output
+  {
+    $project: {
+      data: { $arrayElemAt: ['$paginatedResults', 0] },
+      hasMore: { $gt: [{ $size: '$hasMoreCheck' }, 0] }
+    }
+  },
+  
+  // Clean up the data structure
+  {
+    $replaceRoot: {
+      newRoot: {
+        data: '$data.comments',
+        hasMore: '$hasMore'
+      }
+    }
+  }
 ];
+

@@ -14,11 +14,11 @@ export class GetPostIdDto {
 }
 
 export class GetPaginatedPostCommentsDto {
-  @IsNumber()
-  page: number;
+  @IsString()
+  page: string;
 
-  @IsNumber()
-  limit: number;
+  @IsString()
+  limit: string;
 }
 
 export class addPostCommentsDTO {

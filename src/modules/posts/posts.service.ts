@@ -25,6 +25,7 @@ export class PostsService extends BaseService<Post> {
 
   async getPostComments(id: string, page: number, limit: number) {
     const postId = new this.postModel.base.Types.ObjectId(id);
+    console.log("postId",postId);
     const post = await this.postModel
       .aggregate(getPaginatingComments({ postId, page, limit }))
       .exec();

@@ -91,12 +91,11 @@ export class PostsController {
     }
   }
 
-  //! have to test this API
   @HttpCode(HttpStatus.OK)
   @Get('/get-post-comments/:id')
-  async getPostComments(@Param() params: GetPostIdDto, @Body() body: GetPaginatedPostCommentsDto) {
+  async getPostComments(@Param() params: GetPostIdDto, @Query() query: GetPaginatedPostCommentsDto) {
     try {
-      const limit = body.limit, page = body.page;
+      const limit = Number(query.limit), page = Number(query.page);
       return this.postsService.getPostComments(params.id, page, limit);
     } catch (e) {
       throw new SomeThingWentWrongException();
