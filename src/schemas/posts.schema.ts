@@ -53,7 +53,7 @@ export class Post extends baseSchema {
     creatorId: Types.ObjectId;
     content: string;
     totalLikes: number;
-    likedBy: Types.ObjectId[] | null;
+    likedBy: Types.ObjectId[] | [];
     commentId?: number | null; // if not null, then it's reply of that comment.
     createdAt: Date;
     updatedAt: Date;

@@ -25,7 +25,6 @@ export class PostsService extends BaseService<Post> {
 
   async getPostComments(id: string, page: number, limit: number) {
     const postId = new this.postModel.base.Types.ObjectId(id);
-    console.log("postId",postId);
     const post = await this.postModel
       .aggregate(getPaginatingComments({ postId, page, limit }))
       .exec();
@@ -84,7 +83,7 @@ export class PostsService extends BaseService<Post> {
         content: content,
         creatorId: creator.id,
         totalLikes: 0,
-        likedBy: null,
+        likedBy: [],
         replies: null,
         // reactions: [],
         createdAt: new Date(),
@@ -105,24 +104,38 @@ export class PostsService extends BaseService<Post> {
     likeCount,
     postId,
     creatorId,
+    status = 'LIKE',
   }: {
     commentId: number;
     likeCount: number;
     postId: string;
     creatorId: string;
+    status?: 'LIKE' | 'UNLIKE';
   }) {
-    const post = await this.postModel.updateOne(
+    const update =
+      status === 'LIKE'
+        ? {
+            $addToSet: { 'comments.$.likedBy': creatorId },
+            $set: { 'comments.$.totalLikes': likeCount },
+          }
+        : {
+            $pull: { 'comments.$.likedBy': creatorId },
+            $set: { 'comments.$.totalLikes': likeCount },
+          };
+
+    console.log('update =>', update);
+
+    const result = await this.postModel.updateOne(
       {
         _id: new this.postModel.base.Types.ObjectId(postId),
         'comments.id': commentId,
       },
-      {
-        $set: {
-          'comments.$.totalLikes': likeCount,
-          'comments.$.likedBy': creatorId,
-        },
-      },
+      update,
     );
-    return post;
+    const post = await this.postModel.findOne({
+      _id: new this.postModel.base.Types.ObjectId(postId),
+      'comments.id': commentId,
+    });
+    return { result, post };
   }
 }

@@ -10,7 +10,7 @@ export class MigrationService {
     try {
       await this.postModel.updateMany(
         {},
-        { $set: { likedBy: null, 'comments.$.likedBy': [], 'comments.$.likeCount': 0 } },
+        { $set: { likedBy: [], 'comments.$.likedBy': [], 'comments.$.likeCount': 0 } },
       );
     } catch (error) {
       console.error('Migration failed:', error);
