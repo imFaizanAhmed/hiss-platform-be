@@ -118,8 +118,6 @@ export class PostsService extends BaseService<Post> {
             $set: { 'comments.$.totalLikes': likeCount },
           };
 
-    console.log('update =>', update);
-
     const result = await this.postModel.updateOne(
       {
         _id: new this.postModel.base.Types.ObjectId(postId),
