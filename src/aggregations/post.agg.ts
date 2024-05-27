@@ -103,7 +103,7 @@ export const getPaginatingComments = ({
 
   // Unwind the comments array
   { $unwind: '$comments' },
-  
+
   // Project the necessary fields
   {
     $project: {
@@ -112,7 +112,8 @@ export const getPaginatingComments = ({
       comment: '$comments',
     },
   },
-  
+  // Sort the comments by updatedAt in descending order
+  { $sort: { 'comment.updatedAt': -1 } },
   // Use $facet to handle pagination and hasMore check
   {
     $facet: {
@@ -122,45 +123,44 @@ export const getPaginatingComments = ({
         {
           $group: {
             _id: '$postId',
-            comments: { $push: '$comment' }
-          }
+            comments: { $push: '$comment' },
+          },
         },
         {
           $project: {
             _id: 0,
             postId: '$_id',
-            comments: 1
-          }
-        }
+            comments: 1,
+          },
+        },
       ],
       hasMoreCheck: [
         { $skip: page * limit },
         { $limit: 1 },
         {
           $project: {
-            _id: 0
-          }
-        }
-      ]
-    }
+            _id: 0,
+          },
+        },
+      ],
+    },
   },
 
   // Merge the results and format the final output
   {
     $project: {
       data: { $arrayElemAt: ['$paginatedResults', 0] },
-      hasMore: { $gt: [{ $size: '$hasMoreCheck' }, 0] }
-    }
+      hasMore: { $gt: [{ $size: '$hasMoreCheck' }, 0] },
+    },
   },
-  
+
   // Clean up the data structure
   {
     $replaceRoot: {
       newRoot: {
         data: '$data.comments',
-        hasMore: '$hasMore'
-      }
-    }
-  }
+        hasMore: '$hasMore',
+      },
+    },
+  },
 ];
-
