@@ -51,10 +51,10 @@ export class ProductOutOfStockException extends HttpException {
   }
 }
 
-export class NotPlacedException extends HttpException {
+export class NotFountException extends HttpException {
   constructor(message?: string, statusCode?: number) {
     super(
-      message || 'Creator is not found',
+      message || 'Something not found',
       statusCode || HttpStatus.NOT_FOUND,
     );
   }

@@ -5,8 +5,7 @@ import { Post } from '../../schemas/posts.schema';
 import { BaseService } from 'src/base.service';
 import { CreatorsService } from '../creators/creators.service';
 import {
-  NotPlacedException,
-  SomeThingWentWrongException,
+  NotFountException
 } from 'src/exceptions/errors.exceptions';
 import {
   getPaginatingComments,
@@ -66,37 +65,33 @@ export class PostsService extends BaseService<Post> {
     content: string;
     creatorId: string;
   }) {
-    try {
-      const post = await this.postModel.findById(postId);
-      if (!post) {
-        throw new NotPlacedException('Post not found');
-      }
-
-      const creator = await this.creatorsService.findById(creatorId);
-      if (!creator) {
-        //? in this case "something went wrong is sent"
-        throw new NotPlacedException('creator not found');
-      }
-
-      const newComment = {
-        id: post.comments.length,
-        content: content,
-        creatorId: creator.id,
-        totalLikes: 0,
-        likedBy: [],
-        replies: null,
-        // reactions: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      };
-
-      post.comments.push(newComment);
-      await post.save();
-      return newComment;
-    } catch (e) {
-      throw new SomeThingWentWrongException();
+    const post = await this.postModel.findById(postId);
+    if (!post) {
+      throw new NotFountException('Post not found');
     }
+
+    const creator = await this.creatorsService.findById(creatorId);
+    if (!creator) {
+      //? in this case "something went wrong is sent"
+      throw new NotFountException('Creator not found');
+    }
+
+    const newComment = {
+      id: post.comments.length,
+      content: content,
+      creatorId: creator.id,
+      totalLikes: 0,
+      likedBy: [],
+      replies: null,
+      // reactions: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    };
+
+    post.comments.push(newComment);
+    await post.save();
+    return newComment;
   }
 
   async likeUnlikeComments({
